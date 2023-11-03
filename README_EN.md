@@ -96,14 +96,13 @@ Variables used
   | GH_CLIENTSECRET | yes | apply on github |
   | GH_BACKUP_USER | No | The github username for backing up Nezha's server-side database on github, if not filled in, it is the same as the account GH_USER for panel management authorization |
   | GH_REPO | No | The github repository for backing up Nezha's server-side database files on github |
-  | GH_EMAIL | No | github's mailbox for git push backups to remote repositories |
   | GH_PAT | No | github's PAT |
   | ARGO_AUTH | Yes | Argo Json from https://fscarmen.cloudflare.now.cc<br>Argo token from Cloudflare official website  |
   | ARGO_DOMAIN | Yes | Argo domain |
 
 Koyeb
 
-[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=docker&name=nezha&ports=80;http;/&env[GH_USER]=&env[GH_CLIENTID]=&env[GH_CLIENTSECRET]=&env[GH_REPO]=&env[GH_EMAIL]=&env[GH_PAT]=&env[ARGO_AUTH]=&env[ARGO_DOMAIN]=&image=docker.io/fscarmen/argo-nezha)
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=docker&name=nezha&ports=80;http;/&env[GH_USER]=&env[GH_CLIENTID]=&env[GH_CLIENTSECRET]=&env[GH_REPO]=&env[GH_PAT]=&env[ARGO_AUTH]=&env[ARGO_DOMAIN]=&image=docker.io/fscarmen/argo-nezha)
 
 <img width="927" alt="image" src="https://user-images.githubusercontent.com/92626977/231088411-fbac3e6e-a8a6-4661-bcf8-7c777aa8ffeb.png">
 <img width="1011" alt="image" src="https://github.com/fscarmen2/Argo-Nezha-Service-Container/assets/92626977/61fad972-1be9-4e8d-829a-8faea0c8ed64">
@@ -124,7 +123,6 @@ docker run -dit \
            --name nezha_dashboard \
            --restart always \
            -e GH_USER=<fill in github username> \
-           -e GH_EMAIL=<fill in github email> \
            -e GH_PAT=<fill in the obtained> \
            -e GH_REPO=<fill in customized> \
            -e GH_CLIENTID=<fill in acquired> \
@@ -145,7 +143,6 @@ services.
         restart: always
         environment:
             - GH_USER=<fill in github username>
-            - GH_EMAIL=<fill in your github email>
             - GH_PAT=<<fill in obtained>
             - GH_REPO=<fill in customized>
             - GH_CLIENTID=<fill in obtained>
@@ -216,6 +213,9 @@ tar czvf dashboard.tar.gz /dashboard
 |   |-- argo.json            # Argo tunnel json file, which records information about using the tunnel.
 |   |-- argo.yml             # Argo tunnel yml file, used for streaming web, gRPC and ssh protocols under a single tunnel with different domains.
 |   |-- backup.sh            # Backup data scripts
+|   |-- restore.sh           # Restore backup scripts
+|   |-- dbfile               # Record the name of the latest restore or backup file
+|   |-- version              # Record the current panel app version
 |   |-- data
 |   |   |-- config.yaml      # Configuration for the Nezha panel, e.g. Github OAuth2 / gRPC domain / port / TLS enabled or not.
 |   |   `-- sqlite.db        # SQLite database file that records all severs and cron settings for the panel.
@@ -224,14 +224,12 @@ tar czvf dashboard.tar.gz /dashboard
 |   |-- nezha.key            # Private key information for SSL/TLS certificate.
 |   |-- nezha.pem            # SSL/TLS Privacy Enhancement Email
 |   `-- restore.sh           # Restore backup scripts
-|-- usr
-|   `-- local
-|       `-- bin
-|           |-- cloudflared  # Cloudflare Argo tunnel main program.
-|           |-- grpcwebproxy # gRPC reverse proxy main program.
-|           `-- nezha-agent  # Nezha client, used to monitor the localhost.
-|-- dbfile                   # Record the name of the latest restore or backup file
-`-- version                  # Record the current panel app version
+`-- usr
+    `-- local
+        `-- bin
+            |-- cloudflared  # Cloudflare Argo tunnel main program.
+            |-- grpcwebproxy # gRPC reverse proxy main program.
+            `-- nezha-agent  # Nezha client, used to monitor the localhost.
 ```
 
 

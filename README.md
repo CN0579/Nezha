@@ -96,14 +96,13 @@ Argo 隧道认证方式有 json 和 token，使用两个方式其中之一。推
   | GH_CLIENTSECRET| 是 | 在 github 上申请 |
   | GH_BACKUP_USER | 否 | 在 github 上备份哪吒服务端数据库的 github 用户名，不填则与面板管理授权的账户 GH_USER 一致  |
   | GH_REPO        | 否 | 在 github 上备份哪吒服务端数据库文件的 github 库 |
-  | GH_EMAIL       | 否 | github 的邮箱，用于备份的 git 推送到远程库 |
   | GH_PAT         | 否 | github 的 PAT |
   | ARGO_AUTH      | 是 | Json: 从 https://fscarmen.cloudflare.now.cc 获取的 Argo Json<br> Token: 从 Cloudflare 官网获取 |
   | ARGO_DOMAIN    | 是 | Argo 域名 |
 
 Koyeb
 
-[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=docker&name=nezha&ports=80;http;/&env[GH_USER]=&env[GH_CLIENTID]=&env[GH_CLIENTSECRET]=&env[GH_REPO]=&env[GH_EMAIL]=&env[GH_PAT]=&env[ARGO_AUTH]=&env[ARGO_DOMAIN]=&image=docker.io/fscarmen/argo-nezha)
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=docker&name=nezha&ports=80;http;/&env[GH_USER]=&env[GH_CLIENTID]=&env[GH_CLIENTSECRET]=&env[GH_REPO]=&env[GH_PAT]=&env[ARGO_AUTH]=&env[ARGO_DOMAIN]=&image=docker.io/fscarmen/argo-nezha)
 
 <img width="927" alt="image" src="https://user-images.githubusercontent.com/92626977/231088411-fbac3e6e-a8a6-4661-bcf8-7c777aa8ffeb.png">
 <img width="750" alt="image" src="https://user-images.githubusercontent.com/92626977/231088973-7134aefd-4c80-4559-8e40-17c3be11d27d.png">
@@ -124,7 +123,6 @@ docker run -dit \
            --name nezha_dashboard \
            --restart always \
            -e GH_USER=<填 github 用户名> \
-           -e GH_EMAIL=<填 github 邮箱> \
            -e GH_PAT=<填获取的> \
            -e GH_REPO=<填自定义的> \
            -e GH_CLIENTID=<填获取的>  \
@@ -145,7 +143,6 @@ services:
         restart: always
         environment:
             - GH_USER=<填 github 用户名>
-            - GH_EMAIL=<<填 github 邮箱>
             - GH_PAT=<填获取的>
             - GH_REPO=<填自定义的>
             - GH_CLIENTID=<填获取的>
@@ -215,6 +212,9 @@ tar czvf dashboard.tar.gz /dashboard
 |   |-- argo.json            # Argo 隧道 json 文件，记录着使用隧道的信息
 |   |-- argo.yml             # Argo 隧道 yml 文件，用于在一同隧道下，根据不同域名来分流 web, gRPC 和 ssh 协议的作用
 |   |-- backup.sh            # 备份数据脚本
+|   |-- restore.sh           # 还原备份脚本
+|   |-- dbfile               # 记录最新的还原或备份文件名
+|   |-- version              # 记录当前的面板 app 版本
 |   |-- data
 |   |   |-- config.yaml      # 哪吒面板的配置，如 Github OAuth2 / gRPC 域名 / 端口 / 是否启用 TLS 等信息
 |   |   `-- sqlite.db        # SQLite 数据库文件，记录着面板设置的所有 severs 和 cron 等信息
@@ -223,14 +223,12 @@ tar czvf dashboard.tar.gz /dashboard
 |   |-- nezha.key            # SSL/TLS 证书的私钥信息
 |   |-- nezha.pem            # SSL/TLS 隐私增强邮件
 |   `-- restore.sh           # 还原备份脚本
-|-- usr
-|   `-- local
-|       `-- bin
-|           |-- cloudflared  # Cloudflare Argo 隧道主程序
-|           |-- grpcwebproxy # gRPC 反代主程序
-|           `-- nezha-agent  # 哪吒客户端，用于监控本地 localhost
-|-- dbfile                   # 记录最新的还原或备份文件名
-`-- version                  # 记录当前的面板 app 版本
+`-- usr
+    `-- local
+        `-- bin
+            |-- cloudflared  # Cloudflare Argo 隧道主程序
+            |-- grpcwebproxy # gRPC 反代主程序
+            `-- nezha-agent  # 哪吒客户端，用于监控本地 localhost
 ```
 
 

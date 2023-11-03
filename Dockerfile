@@ -17,7 +17,7 @@ RUN apt-get update &&\
     wget -O grpcwebproxy.tar.gz https://github.com/fscarmen2/Argo-Nezha-Service-Container/releases/download/grpcwebproxy/grpcwebproxy_linux_$(uname -m | sed "s#x86_64#amd64#; s#aarch64#arm64#").tar.gz &&\
     tar xzvf grpcwebproxy.tar.gz -C /usr/local/bin &&\
     rm -f nezha-agent.zip grpcwebproxy.tar.gz cloudflared.deb &&\
-    touch /dbfile &&\
+    touch /dashboard/dbfile &&\
     chmod +x entrypoint.sh &&\
     git config --global core.bigFileThreshold 1k &&\
     git config --global core.compression 0 &&\
